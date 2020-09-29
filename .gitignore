@@ -16,5 +16,8 @@
 *.lvlps
 .cache/
 
+# Logs
+*.csv
+
 # Builds Folder
 **/builds
