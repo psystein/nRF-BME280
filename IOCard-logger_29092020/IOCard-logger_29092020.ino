@@ -64,18 +64,20 @@ uint32_t _lastpacketSendTime;
 
 void setup()
 {
+  Serial.begin(115200);
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(2)) {
+    Serial.println("Card failed, or not present");
+    while (1);
+  }
+
   rtc.begin(39);
   rtc.autoTime();
   delay(1000);
   rtc.update();
 
   pinMode(RF_RX_LED, OUTPUT);
-  Serial.begin(115200);
 
-  if (!SD.begin(2)) {
-    Serial.println("Card failed, or not present");
-    while (1);
-  }
   get_FileName();
   new_set();
   Serial.println("Datalogging Card initialized.");
@@ -103,9 +105,9 @@ void loop()
     _lastpacketSendTime = millis();
     getBME280data();
     if (Enter2Log)
-    { 
+    {
       add2log();
-      Enter2Log = 0; 
+      Enter2Log = 0;
     }
   }
   delay (50);
