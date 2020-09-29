@@ -1,11 +1,13 @@
 void logstring()
 {
+  dataString = "";
   dataString += timevalue + ',' + TVal + ',' + HVal;
-  Serial.println (dataString);
+  Serial.println ( dataString);
 }
 
 void get_timestring()
 {
+  rtc.update();
   timevalue = "";
   timevalue += (String)rtc.date() + '-';
   timevalue += (String)rtc.month(); timevalue += '-';

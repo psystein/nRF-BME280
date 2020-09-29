@@ -72,7 +72,7 @@ void setup()
   }
 
   rtc.begin(39);
-  rtc.autoTime();
+  //rtc.autoTime();
   delay(1000);
   rtc.update();
 
