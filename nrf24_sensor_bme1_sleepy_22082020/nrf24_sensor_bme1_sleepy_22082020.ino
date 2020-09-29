@@ -1,7 +1,7 @@
 /*
 Radio    Arduino
-CE    -> 9
-CSN   -> 10 (Hardware SPI SS)
+CE    -> 7
+CSN   -> 8 (Hardware SPI SS)
 MOSI  -> 11 (Hardware SPI MOSI)
 MISO  -> 12 (Hardware SPI MISO)
 SCK   -> 13 (Hardware SPI SCK)
