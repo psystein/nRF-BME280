@@ -3,7 +3,7 @@
 #include <SPI.h>
 
 void setup() {
- Serial.begin(9600);
+ Serial.begin(115200);
   rtc.begin(39);
   rtc.autoTime();
   delay(1000);

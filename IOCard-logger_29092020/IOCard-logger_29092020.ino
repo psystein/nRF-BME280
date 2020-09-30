@@ -72,8 +72,9 @@ void setup()
   }
 
   rtc.begin(39);
-  //rtc.autoTime();
   delay(1000);
+  rtc.autoTime();
+  //delay(1000);
   rtc.update();
 
   pinMode(RF_RX_LED, OUTPUT);
