@@ -44,7 +44,8 @@ const static uint8_t PIN_RADIO_CSN = 8;
 
 int nRFvcc = 2;     // DO2 for VCC for the nRF
 int BMEvcc = 3;     // DO3 for VCC for the BME
-int bootT = 100;    // Delay for Boot up of NRF and BME
+int bootT = 00;    // Delay for Boot up of NRF and BME
+bool initreq = 0;   // If this is true the BME and nRF need to be Initialized
 
 NRFLite radio;
 
@@ -115,13 +116,13 @@ void loop()
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite (nRFvcc, HIGH);  // Turn on the PS to the NRF for Operation
     digitalWrite (BMEvcc, HIGH);  // Turn on the PS to the BME for Operation
+    digitalWrite(LED_BUILTIN, HIGH);
     delay (bootT); // BootUp Delay for NRF & BME
     sendBME280data();
     secondsLastUpdate = 0;
   }
 
   sleeping();  //  Go to sleep forever... or until the watchdog timer fires!
-
 
   // //     Show any received data.
   //        if (millis() - _lastpacketSendTime > 1000)
@@ -137,7 +138,7 @@ ISR(WDT_vect)
   //  Anything you use in here needs to be declared with "volatile" keyword
   //  Track the passage of time.
   secondsLastUpdate = secondsLastUpdate + 8;
-  Serial.println("awake now");
+  // Serial.println("awake now");
   Serial.print("Sec since last update : ");
   Serial.println(secondsLastUpdate);
   delay (5);
@@ -145,7 +146,7 @@ ISR(WDT_vect)
 
 void sleeping()
 {
-  Serial.println("Going to sleep");
+  // Serial.println("Going to sleep");
   delay (10);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
   sleep_enable();
@@ -163,7 +164,9 @@ void waking()
 
 void sendBME280data()
 {
-  digitalWrite(LED_BUILTIN, HIGH);
+  if (initreq){ // need to initialize the BME and nRF
+  radio.init(RADIO_ID, PIN_RADIO_CE, PIN_RADIO_CSN);
+  bme.begin(0x76); }
   Serial.print("Sending BME280 : ");
   RadioPacket radioData;
   radioData.PacketType = BME280data;
@@ -178,19 +181,20 @@ void sendBME280data()
   msg += ", ";
   msg += "H = ";
   msg += radioData.H;
-  Serial.println (msg);
-  if (radio.send(DESTINATION_RADIO_ID, &radioData, sizeof(radioData))) // 'send' puts the radio into Tx mode.
+  Serial.print (msg);
+  if (!radio.send(DESTINATION_RADIO_ID, &radioData, sizeof(radioData))) // 'send' puts the radio into Tx mode.
   {
-    Serial.println("...Success");
+    Serial.println("...Sent");
   }
-  //    else
-  //    {
-  //        Serial.println("...Failed");
-  //    }
+      else
+      {
+          Serial.println("...Failed");
+      }
   digitalWrite(LED_BUILTIN, LOW);
   delay (bootT); // BootUp Delay for NRF & BME
   digitalWrite (nRFvcc, LOW);  // Turn oFF the PS to the NRF for Power Save
   digitalWrite (BMEvcc, LOW);  // Turn oFF the PS to the BME for Power Save
+  initreq = 1;   // If this is true the BME and nRF need to be Initialized 
 }
 
 void getBME280data()
