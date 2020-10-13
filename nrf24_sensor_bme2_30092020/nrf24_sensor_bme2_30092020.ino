@@ -114,8 +114,8 @@ void loop()
   if ( secondsLastUpdate >= secondsUpdateFrequency)
   {
     digitalWrite(LED_BUILTIN, HIGH);
-    digitalWrite (nRFvcc, HIGH);  // Turn on the PS to the NRF for Operation
-    digitalWrite (BMEvcc, HIGH);  // Turn on the PS to the BME for Operation
+    //digitalWrite (nRFvcc, HIGH);  // Turn on the PS to the NRF for Operation
+    //digitalWrite (BMEvcc, HIGH);  // Turn on the PS to the BME for Operation
     digitalWrite(LED_BUILTIN, HIGH);
     delay (bootT); // BootUp Delay for NRF & BME
     sendBME280data();
@@ -192,8 +192,8 @@ void sendBME280data()
       }
   digitalWrite(LED_BUILTIN, LOW);
   delay (bootT); // BootUp Delay for NRF & BME
-  digitalWrite (nRFvcc, LOW);  // Turn oFF the PS to the NRF for Power Save
-  digitalWrite (BMEvcc, LOW);  // Turn oFF the PS to the BME for Power Save
+  //digitalWrite (nRFvcc, LOW);  // Turn oFF the PS to the NRF for Power Save
+  //digitalWrite (BMEvcc, LOW);  // Turn oFF the PS to the BME for Power Save
   initreq = 1;   // If this is true the BME and nRF need to be Initialized 
 }
 

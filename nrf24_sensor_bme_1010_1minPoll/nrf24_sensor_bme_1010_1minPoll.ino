@@ -18,6 +18,8 @@
   VCC to BME and nRF given from the DO of the AT328P
 */
 
+const static uint8_t ID = 1;
+
 #include "watchdogHandler.h"
 #include <avr/power.h>
 #include <avr/wdt.h>
@@ -31,13 +33,13 @@
 #include <NRFLite.h>
 
 volatile unsigned long secondsLastUpdate = 0;
-unsigned long reqlogintervals = 30; // enter value in Sec - interval between two log entires
+unsigned long reqlogintervals = 60; // enter value in Sec - interval between two log entires
 unsigned long secondsUpdateFrequency = ((reqlogintervals / 8) * 8); // - 5;
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 Adafruit_BME280 bme;
 
-const static uint8_t RADIO_ID = 1;
+const static uint8_t RADIO_ID = ID;
 const static uint8_t DESTINATION_RADIO_ID = 0;
 const static uint8_t PIN_RADIO_CE = 7;
 const static uint8_t PIN_RADIO_CSN = 8;
@@ -70,6 +72,8 @@ struct RadioPacket
 void setup()
 { 
   wdt_disable(); //  Disable the watchdog timer first thing, in case it is misconfigured
+  static byte prevADCSRA = ADCSRA; // Store present state of ADC
+  ADCSRA = 0;  // Turn off ADC
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(nRFvcc, OUTPUT); // VCC to NRF controlled using the D2 pin
   pinMode(BMEvcc, OUTPUT); // VCC to BME controlled using the D3 pin
@@ -148,6 +152,7 @@ void sleeping()
   // Serial.println("Going to sleep");
   delay (10);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_bod_disable();
   sleep_enable();
   sei();
   sleep_cpu();

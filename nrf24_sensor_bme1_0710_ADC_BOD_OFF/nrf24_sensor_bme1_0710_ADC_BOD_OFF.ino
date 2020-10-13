@@ -70,6 +70,8 @@ struct RadioPacket
 void setup()
 { 
   wdt_disable(); //  Disable the watchdog timer first thing, in case it is misconfigured
+  static byte prevADCSRA = ADCSRA; // Store present state of ADC
+  ADCSRA = 0;  // Turn off ADC
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(nRFvcc, OUTPUT); // VCC to NRF controlled using the D2 pin
   pinMode(BMEvcc, OUTPUT); // VCC to BME controlled using the D3 pin
@@ -148,6 +150,7 @@ void sleeping()
   // Serial.println("Going to sleep");
   delay (10);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_bod_disable();
   sleep_enable();
   sei();
   sleep_cpu();
