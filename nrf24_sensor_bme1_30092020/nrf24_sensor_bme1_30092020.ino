@@ -37,8 +37,8 @@ unsigned long secondsUpdateFrequency = ((reqlogintervals / 8) * 8); // - 5;
 #define SEALEVELPRESSURE_HPA (1013.25)
 Adafruit_BME280 bme;
 
-const static uint8_t RADIO_ID = 1;
-const static uint8_t DESTINATION_RADIO_ID = 0;
+const static uint8_t RADIO_ID = 11;
+const static uint8_t DESTINATION_RADIO_ID = 10;
 const static uint8_t PIN_RADIO_CE = 7;
 const static uint8_t PIN_RADIO_CSN = 8;
 

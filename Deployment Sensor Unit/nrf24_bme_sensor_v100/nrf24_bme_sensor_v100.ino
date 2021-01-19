@@ -85,6 +85,9 @@ void setup()
   Serial.print ("Sensor ID : ");
   Serial.println(RADIO_ID);
   Serial.println("");
+  Serial.print ("Receiver ID : ");
+  Serial.println(DESTINATION_RADIO_ID);
+  Serial.println("");
   Serial.print ("Required Logging Interval (sec) : ");
   Serial.println(reqlogintervals);
   Serial.println("");
